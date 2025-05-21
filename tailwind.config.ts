@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,14 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Tea-themed custom colors
+				tea: {
+					light: '#8BC34A',
+					DEFAULT: '#4CAF50',
+					dark: '#2E7D32',
+					brown: '#795548',
+					gold: '#FFC107'
 				}
 			},
 			borderRadius: {
