@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { Calendar, Search, Filter, ChevronDown, FileTextIcon, DownloadIcon, BarChart3Icon, DollarSignIcon, UsersIcon } from 'lucide-react';
+import GenerateReportForm from '@/components/reports/GenerateReportForm';
 
 // Sample reports data
 const reportsData = [
@@ -63,15 +64,26 @@ const getReportIcon = (type: string) => {
 };
 
 const Reports = () => {
+  const [isGenerateReportOpen, setIsGenerateReportOpen] = useState(false);
+
   return (
     <Layout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Reports</h1>
-        <Button className="bg-tea-dark hover:bg-tea-dark/90">
+        <Button 
+          className="bg-tea-dark hover:bg-tea-dark/90"
+          onClick={() => setIsGenerateReportOpen(true)}
+        >
           <FileTextIcon className="h-4 w-4 mr-2" />
           Generate New Report
         </Button>
       </div>
+
+      {/* Generate Report Form Dialog */}
+      <GenerateReportForm 
+        open={isGenerateReportOpen} 
+        onOpenChange={setIsGenerateReportOpen} 
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100">

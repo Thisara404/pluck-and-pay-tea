@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, Search, Filter, User } from 'lucide-react';
+import AddPluckerForm from '@/components/pluckers/AddPluckerForm';
 
 // Sample pluckers data
 const pluckersData = [
@@ -17,15 +18,26 @@ const pluckersData = [
 ];
 
 const Pluckers = () => {
+  const [isAddPluckerOpen, setIsAddPluckerOpen] = useState(false);
+
   return (
     <Layout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Tea Pluckers</h1>
-        <Button className="bg-tea-dark hover:bg-tea-dark/90">
+        <Button 
+          className="bg-tea-dark hover:bg-tea-dark/90"
+          onClick={() => setIsAddPluckerOpen(true)}
+        >
           <PlusIcon className="h-4 w-4 mr-2" />
           Add New Plucker
         </Button>
       </div>
+
+      {/* Add Plucker Form Dialog */}
+      <AddPluckerForm 
+        open={isAddPluckerOpen} 
+        onOpenChange={setIsAddPluckerOpen} 
+      />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">

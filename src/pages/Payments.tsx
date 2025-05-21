@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { PlusIcon, Calendar, Search, Filter, ChevronDown, DollarSignIcon, CheckIcon, XIcon } from 'lucide-react';
+import ProcessPaymentForm from '@/components/payments/ProcessPaymentForm';
 
 // Sample payments data
 const paymentsData = [
@@ -14,15 +15,26 @@ const paymentsData = [
 ];
 
 const Payments = () => {
+  const [isProcessPaymentOpen, setIsProcessPaymentOpen] = useState(false);
+
   return (
     <Layout>
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Payments</h1>
-        <Button className="bg-tea-dark hover:bg-tea-dark/90">
+        <Button 
+          className="bg-tea-dark hover:bg-tea-dark/90"
+          onClick={() => setIsProcessPaymentOpen(true)}
+        >
           <PlusIcon className="h-4 w-4 mr-2" />
           Process New Payment
         </Button>
       </div>
+
+      {/* Process Payment Form Dialog */}
+      <ProcessPaymentForm 
+        open={isProcessPaymentOpen} 
+        onOpenChange={setIsProcessPaymentOpen} 
+      />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-6 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
