@@ -2,8 +2,9 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { Calendar, Search, Filter, ChevronDown, FileTextIcon, DownloadIcon, BarChart3Icon, DollarSignIcon, UsersIcon } from 'lucide-react';
+import { Calendar, Search, Filter, ChevronDown, FileTextIcon, DownloadIcon, BarChart3Icon, DollarSignIcon, UsersIcon, Eye } from 'lucide-react';
 import GenerateReportForm from '@/components/reports/GenerateReportForm';
+import ViewReportCard from '@/components/reports/ViewReportCard';
 
 // Sample reports data
 const reportsData = [
@@ -65,6 +66,18 @@ const getReportIcon = (type: string) => {
 
 const Reports = () => {
   const [isGenerateReportOpen, setIsGenerateReportOpen] = useState(false);
+  const [isViewReportOpen, setIsViewReportOpen] = useState(false);
+  const [selectedReport, setSelectedReport] = useState(reportsData[0]);
+
+  const handleViewReport = (report: typeof reportsData[0]) => {
+    setSelectedReport(report);
+    setIsViewReportOpen(true);
+  };
+
+  const handleDownloadPdf = (reportId: number) => {
+    // Handle PDF download logic
+    console.log("Downloading PDF for report:", reportId);
+  };
 
   return (
     <Layout>
@@ -83,6 +96,13 @@ const Reports = () => {
       <GenerateReportForm 
         open={isGenerateReportOpen} 
         onOpenChange={setIsGenerateReportOpen} 
+      />
+
+      {/* View Report Dialog */}
+      <ViewReportCard 
+        open={isViewReportOpen} 
+        onOpenChange={setIsViewReportOpen}
+        report={selectedReport}
       />
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
@@ -192,9 +212,22 @@ const Reports = () => {
                   </td>
                   <td className="px-6 py-4 text-gray-700">{report.created}</td>
                   <td className="px-6 py-4 text-gray-700">{report.downloads}</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="outline" size="sm" className="mr-2">View</Button>
-                    <Button variant="outline" size="sm" className="flex items-center">
+                  <td className="px-6 py-4 flex items-center">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mr-2 flex items-center"
+                      onClick={() => handleViewReport(report)}
+                    >
+                      <Eye className="h-3.5 w-3.5 mr-1" />
+                      View
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="flex items-center"
+                      onClick={() => handleDownloadPdf(report.id)}
+                    >
                       <DownloadIcon className="h-3.5 w-3.5 mr-1" />
                       Download
                     </Button>

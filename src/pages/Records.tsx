@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { PlusIcon, Calendar, Search, Filter, ChevronDown, LeafIcon } from 'lucide-react';
+import { PlusIcon, Calendar, Search, Filter, ChevronDown, LeafIcon, Eye, Pencil, FileText, Download } from 'lucide-react';
 import AddRecordForm from '@/components/records/AddRecordForm';
+import ViewRecordCard from '@/components/records/ViewRecordCard';
+import EditRecordCard from '@/components/records/EditRecordCard';
 
 // Sample records data
 const recordsData = [
@@ -19,6 +21,24 @@ const recordsData = [
 
 const Records = () => {
   const [isAddRecordOpen, setIsAddRecordOpen] = useState(false);
+  const [isViewRecordOpen, setIsViewRecordOpen] = useState(false);
+  const [isEditRecordOpen, setIsEditRecordOpen] = useState(false);
+  const [selectedRecord, setSelectedRecord] = useState(recordsData[0]);
+
+  const handleViewRecord = (record: typeof recordsData[0]) => {
+    setSelectedRecord(record);
+    setIsViewRecordOpen(true);
+  };
+
+  const handleEditRecord = (record: typeof recordsData[0]) => {
+    setSelectedRecord(record);
+    setIsEditRecordOpen(true);
+  };
+
+  const handleDownloadPdf = (recordId: number) => {
+    // Handle PDF download logic
+    console.log("Downloading PDF for record:", recordId);
+  };
 
   return (
     <Layout>
@@ -37,6 +57,20 @@ const Records = () => {
       <AddRecordForm 
         open={isAddRecordOpen} 
         onOpenChange={setIsAddRecordOpen} 
+      />
+
+      {/* View Record Dialog */}
+      <ViewRecordCard 
+        open={isViewRecordOpen} 
+        onOpenChange={setIsViewRecordOpen}
+        record={selectedRecord}
+      />
+
+      {/* Edit Record Dialog */}
+      <EditRecordCard 
+        open={isEditRecordOpen} 
+        onOpenChange={setIsEditRecordOpen}
+        record={selectedRecord}
       />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-6 p-6">
@@ -129,9 +163,34 @@ const Records = () => {
                   <td className="px-6 py-4 text-gray-700">{record.pluckerCount}</td>
                   <td className="px-6 py-4 text-gray-700">${record.averagePrice.toFixed(2)}</td>
                   <td className="px-6 py-4 text-gray-700">${(record.totalWeight * record.averagePrice).toFixed(2)}</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="outline" size="sm" className="mr-2">View</Button>
-                    <Button variant="outline" size="sm">Edit</Button>
+                  <td className="px-6 py-4 flex items-center">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mr-2 flex items-center"
+                      onClick={() => handleViewRecord(record)}
+                    >
+                      <Eye className="h-3.5 w-3.5 mr-1" />
+                      View
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="mr-2 flex items-center"
+                      onClick={() => handleEditRecord(record)}
+                    >
+                      <Pencil className="h-3.5 w-3.5 mr-1" />
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex items-center"
+                      onClick={() => handleDownloadPdf(record.id)}
+                    >
+                      <Download className="h-3.5 w-3.5 mr-1" />
+                      PDF
+                    </Button>
                   </td>
                 </tr>
               ))}

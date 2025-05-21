@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import Layout from '../components/layout/Layout';
 import { Button } from '@/components/ui/button';
-import { PlusIcon, Calendar, Search, Filter, ChevronDown, DollarSignIcon, CheckIcon, XIcon } from 'lucide-react';
+import { PlusIcon, Calendar, Search, Filter, ChevronDown, DollarSignIcon, CheckIcon, XIcon, Eye, Pencil, FileText, Download } from 'lucide-react';
 import ProcessPaymentForm from '@/components/payments/ProcessPaymentForm';
+import ViewPaymentCard from '@/components/payments/ViewPaymentCard';
+import EditPaymentCard from '@/components/payments/EditPaymentCard';
 
 // Sample payments data
 const paymentsData = [
@@ -16,6 +18,24 @@ const paymentsData = [
 
 const Payments = () => {
   const [isProcessPaymentOpen, setIsProcessPaymentOpen] = useState(false);
+  const [isViewPaymentOpen, setIsViewPaymentOpen] = useState(false);
+  const [isEditPaymentOpen, setIsEditPaymentOpen] = useState(false);
+  const [selectedPayment, setSelectedPayment] = useState(paymentsData[0]);
+
+  const handleViewPayment = (payment: typeof paymentsData[0]) => {
+    setSelectedPayment(payment);
+    setIsViewPaymentOpen(true);
+  };
+
+  const handleEditPayment = (payment: typeof paymentsData[0]) => {
+    setSelectedPayment(payment);
+    setIsEditPaymentOpen(true);
+  };
+
+  const handleDownloadPdf = (paymentId: number) => {
+    // Handle PDF download logic
+    console.log("Downloading PDF for payment:", paymentId);
+  };
 
   return (
     <Layout>
@@ -34,6 +54,20 @@ const Payments = () => {
       <ProcessPaymentForm 
         open={isProcessPaymentOpen} 
         onOpenChange={setIsProcessPaymentOpen} 
+      />
+
+      {/* View Payment Dialog */}
+      <ViewPaymentCard 
+        open={isViewPaymentOpen} 
+        onOpenChange={setIsViewPaymentOpen}
+        payment={selectedPayment}
+      />
+
+      {/* Edit Payment Dialog */}
+      <EditPaymentCard 
+        open={isEditPaymentOpen} 
+        onOpenChange={setIsEditPaymentOpen}
+        payment={selectedPayment}
       />
 
       <div className="bg-white rounded-xl shadow-sm border border-gray-100 mb-6 p-6">
@@ -123,9 +157,34 @@ const Payments = () => {
                   <td className="px-6 py-4 text-gray-700">{payment.pluckerCount}</td>
                   <td className="px-6 py-4 text-gray-700">${payment.totalAmount.toFixed(2)}</td>
                   <td className="px-6 py-4 text-gray-700">{payment.date}</td>
-                  <td className="px-6 py-4 text-right">
-                    <Button variant="outline" size="sm" className="mr-2">View</Button>
-                    <Button variant="outline" size="sm">Report</Button>
+                  <td className="px-6 py-4 flex items-center">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="mr-2 flex items-center"
+                      onClick={() => handleViewPayment(payment)}
+                    >
+                      <Eye className="h-3.5 w-3.5 mr-1" />
+                      View
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="mr-2 flex items-center"
+                      onClick={() => handleEditPayment(payment)}
+                    >
+                      <Pencil className="h-3.5 w-3.5 mr-1" />
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="flex items-center"
+                      onClick={() => handleDownloadPdf(payment.id)}
+                    >
+                      <Download className="h-3.5 w-3.5 mr-1" />
+                      PDF
+                    </Button>
                   </td>
                 </tr>
               ))}
